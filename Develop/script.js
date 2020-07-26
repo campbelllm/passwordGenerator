@@ -11,79 +11,33 @@ var userInputs = {
   numeric: null,
   special: null
 }
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  passwordText.value = password;
-
-}
-
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
-
-function generatePassword() {
-  var passwordLengthPrompt = prompt("Length of password? (between 8-128)");
-  validateLength(passwordLengthPrompt);
-  var lowercasePrompt = prompt("Include lowercase letters?");
-  validateLowerCase(lowercasePrompt);
-  var uppercasePrompt = prompt("Include uppercase letters?");
-  validateUpperCase(uppercasePrompt);
-  var numericPrompt = prompt("Include numbers?");
-  validateNumeric(numericPrompt);
-  var specialPrompt = prompt("Include special characters?");
-  validateSpecial(specialPrompt);
-  console.log(userInputs);
-  return finalPassword();
- 
-};
-
+// Defining validation
 function validateLength(value) {
   var input = parseInt(value);
   if (input > 7 && input < 129) {
     userInputs.passwordLength = input;
+    return true;
   } else {
     alert("invalid try again")
     return false;
   }
 };
 
-function validateLowerCase(value) {
+function validateInput(value, key) {
   var input = value.toLowerCase();
   if (input === 'yes') {
-    userInputs.lower = true;
+    userInputs[key] = true;
   } else if (input === 'no') {
-    userInputs.lower = false;
+    userInputs[key] = false;
+  }else{
+    alert("invalid try again")
+    return null;
   }
+  return true;
 };
 
-function validateUpperCase(value) {
-  var input = value.toLowerCase();
-  if (input === 'yes') {
-    userInputs.upper = true;
-  } else if (input === 'no') {
-    userInputs.upper = false;
-  }
-};
 
-function validateNumeric(value) {
-  var input = value.toLowerCase();
-  if (input === 'yes') {
-    userInputs.numeric = true;
-  } else if (input === 'no') {
-    userInputs.numeric = false;
-  }
-};
-
-function validateSpecial(value) {
-  var input = value.toLowerCase();
-  if (input === 'yes') {
-    userInputs.special = true;
-  } else if (input === 'no') {
-    userInputs.special = false;
-  }
-};
+// Selecting random characters
 
 function finalPassword() {
   var password = "";
@@ -91,7 +45,7 @@ function finalPassword() {
     
     if (userInputs.lower === true) {
       var random = Math.floor(Math.random() * lowerCaseLetters.length)
-       password += lowerCaseLetters[random];
+      password += lowerCaseLetters[random];
     }
     if (userInputs.upper === true) {
       var random = Math.floor(Math.random() * upperCaseLetters.length)
@@ -109,5 +63,41 @@ function finalPassword() {
   return password;
 };
 
+// Prompts and using validation
+function generatePassword() {
+  var passwordLengthPrompt = prompt("Length of password? (between 8-128)");
+  var lengthValid = validateLength(passwordLengthPrompt);
+  if(!lengthValid) return null;
 
+  var lowercasePrompt = prompt("Include lowercase letters?");
+  var lowercaseValid = validateInput(lowercasePrompt, 'lower');
+  if(!lowercaseValid) return null;
+  
+  var uppercasePrompt = prompt("Include uppercase letters?");
+  var uppercaseValid = validateInput(uppercasePrompt, 'upper');
+  if(!uppercaseValid) return null;
+  
+  var numericPrompt = prompt("Include numbers?");
+  var numericValid = validateInput(numericPrompt, 'numeric');
+  if(!numericValid) return null;
+
+  var specialPrompt = prompt("Include special characters?");
+  var specialValid = validateInput(specialPrompt, 'special');
+  if(!specialValid) return null;
+  
+  console.log(userInputs);
+  return finalPassword();
+};
+
+// Write password to the #password input
+function writePassword() {
+  var password = generatePassword();
+  var passwordText = document.querySelector("#password");
+
+  passwordText.value = password;
+
+}
+
+// Add event listener to generate button
+generateBtn.addEventListener("click", writePassword);
 
