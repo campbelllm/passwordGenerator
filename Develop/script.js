@@ -24,7 +24,7 @@ function validateLength(value) {
 };
 
 function validateInput(value, key) {
-  var input = value.toLowerCase();
+  var input = value.toLowerCase().trim();
   if (input === 'yes') {
     userInputs[key] = true;
   } else if (input === 'no') {
